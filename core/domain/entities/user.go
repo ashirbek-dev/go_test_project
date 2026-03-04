@@ -7,6 +7,6 @@ import (
 
 type User struct {
 	Id        uuid.UUID
-	Pinfl     string
+	Name     string
 	CreatedAt time.Time
 }

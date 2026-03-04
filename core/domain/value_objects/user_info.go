@@ -7,11 +7,6 @@ import (
 
 type UserInfo struct {
 	Id             uuid.UUID
-	RefId          string
-	UserId         uuid.UUID
-	FirstName      string
-	LastName       string
-	PassportSerial string
-	PassportNumber string
+	Name      string
 	CreatedAt      time.Time
 }
