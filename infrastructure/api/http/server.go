@@ -14,7 +14,7 @@ type Server struct {
 }
 
 func CreateServer(appService *app.ApplicationService) *Server {
-	gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.DebugMode)
 	/*_router := gin.Default()
 	_router.Use(cors.Default())*/
 	_router := gin.New()

@@ -51,9 +51,8 @@ func getRouter() map[string]ControllerAction {
 		userCtrl := controllers.UserController{}
 
 		router = map[string]ControllerAction{
-			"user.create":    userCtrl.Create,
-			"user.get":       userCtrl.Get,
-			"user.add_phone": userCtrl.AddPhone,
+			"user.create": userCtrl.Create,
+			"user.get":    userCtrl.Get,
 		}
 	}
 
@@ -69,18 +68,18 @@ func (n *Controller) Handle(c *gin.Context) (*data_objects.JsonRpcSuccessRespons
 	//ctx := context.RequestContext{}
 
 	if _readErr != nil {
-		n.appService.Context.Logger.Error("handle_payload_data:reading", _readErr)
+		//n.appService.Context.Logger.Error("handle_payload_data:reading", _readErr)
 		return nil, data_objects.CreateErrorResponse(json_rpc_errors.CreateJsonRpcError(nil, json_rpc_errors.E_JSON_RPC_PARSER_ERROR, errors.New("invalid request")))
 	}
 	// validate json
 	if !json.Valid(requestBytes) {
-		n.appService.Context.Logger.Error("handle_payload_data:validation", errors.New("invalid request"))
+		//n.appService.Context.Logger.Error("handle_payload_data:validation", errors.New("invalid request"))
 		return nil, data_objects.CreateErrorResponse(json_rpc_errors.CreateJsonRpcError(nil, json_rpc_errors.E_JSON_RPC_INVALID_REQUEST, errors.New("invalid request")))
 	}
 
 	parseErr := json.Unmarshal(requestBytes, &jsonRpcRequest)
 	if parseErr != nil {
-		n.appService.Context.Logger.Error("handle_payload_data:unmarshal", parseErr)
+		//n.appService.Context.Logger.Error("handle_payload_data:unmarshal", parseErr)
 		return nil, data_objects.CreateErrorResponse(json_rpc_errors.CreateJsonRpcError(nil, json_rpc_errors.E_JSON_RPC_INVALID_REQUEST, errors.New("invalid request")))
 	}
 
@@ -88,7 +87,7 @@ func (n *Controller) Handle(c *gin.Context) (*data_objects.JsonRpcSuccessRespons
 	handler, found := r[jsonRpcRequest.Method]
 
 	if !found {
-		n.appService.Context.Logger.Error("handle_payload_data:method_not_found", errors.New("method not found"))
+		//n.appService.Context.Logger.Error("handle_payload_data:method_not_found", errors.New("method not found"))
 		return nil, data_objects.CreateErrorResponse(json_rpc_errors.CreateJsonRpcError(jsonRpcRequest.Id, json_rpc_errors.E_JSON_RPC_METHOD_NOT_FOUND, errors.New("method not found")))
 	}
 
@@ -96,7 +95,7 @@ func (n *Controller) Handle(c *gin.Context) (*data_objects.JsonRpcSuccessRespons
 	var marshal []byte
 	marshal, err = json.Marshal(jsonRpcRequest.Params)
 	if err != nil {
-		n.appService.Context.Logger.Error("handle_payload_data:marshal", err)
+		//n.appService.Context.Logger.Error("handle_payload_data:marshal", err)
 		return nil, data_objects.CreateErrorResponse(json_rpc_errors.CreateJsonRpcError(nil, json_rpc_errors.E_JSON_RPC_INVALID_REQUEST, errors.New("invalid request")))
 	}
 

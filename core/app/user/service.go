@@ -13,8 +13,8 @@ type Queries struct {
 
 type Commands struct {
 	CreateUser commands.CreateUserHandler
-	AddPhone   commands.AddPhoneHandler
-	PhoneFound commands.PhoneFoundHandler
+	UpdateUser commands.UpdateUserHandler
+	Delete     commands.DeleteUserHandler
 }
 
 type Service struct {
@@ -29,8 +29,8 @@ func GetService(appCtx context.ApplicationContext, repo repositories.UserReposit
 		},
 		Commands: Commands{
 			CreateUser: commands.GetCreateUserHandler(appCtx, repo),
-			AddPhone:   commands.GetAddPhoneHandler(appCtx, repo),
-			PhoneFound: commands.GetPhoneFoundHandler(appCtx, repo),
+			UpdateUser: commands.GetUpdateUserHandler(appCtx, repo),
+			Delete:     commands.GetDeleteUserHandler(appCtx, repo),
 		},
 	}
 }

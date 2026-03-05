@@ -2,12 +2,9 @@ package utils
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"gateway/core/app_errors"
 	"gateway/infrastructure/api/nats_connection"
 	"os"
-	"reflect"
 	"time"
 )
 
@@ -31,13 +28,13 @@ func InitLogger(subject string) {
 }
 
 func (n NatsLogger) Log(action string, details ...any) {
-	data := map[string]any{
-		"action": action,
-		"data":   details,
-		"time":   time.Now().UnixMilli(),
-	}
-	payload, _ := json.Marshal(data)
-	n.natsService.Send(n.subject, payload)
+	//data := map[string]any{
+	//	"action": action,
+	//	"data":   details,
+	//	"time":   time.Now().UnixMilli(),
+	//}
+	//payload, _ := json.Marshal(data)
+	//n.natsService.Send(n.subject, payload)
 }
 
 func (n NatsLogger) LogRequestResponse(action string, url string, request any, requestTime time.Time, responseCode int, response any) {
@@ -61,23 +58,23 @@ func (n NatsLogger) LogRequestResponse(action string, url string, request any, r
 }
 
 func (n NatsLogger) Error(action string, err error, details ...any) {
-	var code int
-	if errors.Is(err, &app_errors.ApplicationError{}) {
-		if reflect.ValueOf(err).Kind() == reflect.Ptr {
-			code = err.(*app_errors.ApplicationError).Code()
-		} else {
-			code = err.(app_errors.ApplicationError).Code()
-		}
-	}
-	data := map[string]any{
-		"action": action,
-		"data": map[string]any{
-			"error":   err.Error(),
-			"code":    code,
-			"details": details,
-		},
-		"time": time.Now().UnixMilli(),
-	}
-	payload, _ := json.Marshal(data)
-	n.natsService.Send(fmt.Sprintf(`%s_error`, n.subject), payload)
+	//var code int
+	//if errors.Is(err, &app_errors.ApplicationError{}) {
+	//	if reflect.ValueOf(err).Kind() == reflect.Ptr {
+	//		code = err.(*app_errors.ApplicationError).Code()
+	//	} else {
+	//		code = err.(app_errors.ApplicationError).Code()
+	//	}
+	//}
+	//data := map[string]any{
+	//	"action": action,
+	//	"data": map[string]any{
+	//		"error":   err.Error(),
+	//		"code":    code,
+	//		"details": details,
+	//	},
+	//	"time": time.Now().UnixMilli(),
+	//}
+	//payload, _ := json.Marshal(data)
+	//n.natsService.Send(fmt.Sprintf(`%s_error`, n.subject), payload)
 }
