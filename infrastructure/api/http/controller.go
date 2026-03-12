@@ -5,7 +5,6 @@ import (
 	"errors"
 	"gateway/core/app"
 	"gateway/core/app_errors"
-	"gateway/infrastructure/api/http/controllers"
 	"gateway/infrastructure/api/http/data_objects"
 	"gateway/infrastructure/api/http/json_rpc_errors"
 	"github.com/gin-gonic/gin"
@@ -48,11 +47,11 @@ var router map[string]ControllerAction
 func getRouter() map[string]ControllerAction {
 
 	if router == nil {
-		userCtrl := controllers.UserController{}
+		//userCtrl := controllers.UserController{}
 
 		router = map[string]ControllerAction{
-			"user.create": userCtrl.Create,
-			"user.get":    userCtrl.Get,
+			//"user.create": userCtrl.Create,
+			//"user.get":    userCtrl.Get,
 		}
 	}
 

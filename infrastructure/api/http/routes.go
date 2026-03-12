@@ -18,7 +18,7 @@ func (s *Server) Routes() *gin.Engine {
 	}
 
 	api := _router.Group("/api")
-	//api.Use(BasicAuthMiddleware())
+	api.Use(BasicAuthMiddleware(s.appService))
 
 	api.POST("v1", controller.PostHandler)
 	api.GET("v1", controller.GetHandler)

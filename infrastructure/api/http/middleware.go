@@ -1,7 +1,11 @@
 package http
 
 import (
+	"gateway/core/app"
+	"gateway/core/app/token/queries"
+	postgresrepo "gateway/infrastructure/storage/postgres/repositories"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 type AuthErrorResponse struct {
@@ -13,11 +17,12 @@ type AuthErrorResponse struct {
 	} `json:"error"`
 }
 
-func BasicAuthMiddleware() gin.HandlerFunc {
+func BasicAuthMiddleware(appService *app.ApplicationService) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-		username, password, ok := c.Request.BasicAuth()
-		if !ok {
+
+		authHeader := c.Request.Header.Get("Authorization")
+		if authHeader == "" {
 			c.JSON(401, AuthErrorResponse{
 				Jsonrpc: "2.0",
 				Error: struct {
@@ -29,7 +34,11 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if !isValidUser(username, password) {
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+
+		tokenService := appService.GetTokenService(postgresrepo.Token{})
+		res, err := tokenService.Queries.ValidateToken.Handle(queries.ValidateTokenQuery{Token: token})
+		if err != nil || res == nil || !res.IsValid {
 			c.JSON(401, AuthErrorResponse{
 				Jsonrpc: "2.0",
 				Error: struct {
@@ -41,18 +50,7 @@ func BasicAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("auth:username", username)
-		c.Set("auth:password", password)
+		c.Set("service_id", res.ServiceId)
 		c.Next()
 	}
-}
-
-func isValidUser(username, password string) bool {
-
-	return true
-	/*user, err := models.GetUserByUsername(username)
-	if err != nil || user == nil {
-		return false
-	}
-	return username == user.Username && password == user.Password*/
 }

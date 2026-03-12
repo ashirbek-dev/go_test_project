@@ -5,7 +5,6 @@ import (
 	"gateway/core/context"
 	"gateway/infrastructure/api/http"
 	"gateway/infrastructure/storage/postgres"
-	"gateway/infrastructure/storage/redis"
 	"gateway/infrastructure/utils"
 	"github.com/joho/godotenv"
 	"log"
@@ -17,8 +16,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	utils.InitLogger("humo")
-	redis.InitKvRedis()
+	utils.InitLogger("gateway")
+	//redis.InitKvRedis()
 }
 
 func main() {
